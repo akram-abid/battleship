@@ -69,7 +69,7 @@ ship.hit()
 console.log(ship.hits)
 */
 
-function Coordinates(x, y) {
+export function Coordinates(x, y) {
     return {
         x,
         y,

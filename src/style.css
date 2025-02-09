@@ -26,6 +26,7 @@ body {
 
 .board-container {
     display: flex;
+    flex: 1;
     flex-direction: column;
     background-color: rgba(0, 0, 27, 0.671);
     align-items: center;
@@ -53,4 +54,6 @@ body {
 
 .cell {
     border: solid 1px rgba(255, 255, 255, 0.699);
+    height: 100%;
+    width: 100%;
 }
