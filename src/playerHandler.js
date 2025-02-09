@@ -1,9 +1,8 @@
 import { gameboard } from "./gameboard.js"
 
-function Player(name, auto, board = gameboard()){
+export function Player(name, board = gameboard()){
     return {
         name,
-        auto,
         board,
     }
 }
