@@ -1,4 +1,6 @@
-import {Ship} from './shipHandler.js'
+import { Ship } from "./shipHandler.js";
+
+let shipsName = ["twoed", "threed-one", "threed-two", "fived"];
 
 export function gameboard(board = createBoard(), ships = createShips()) {
     return {
@@ -42,17 +44,24 @@ export function gameboard(board = createBoard(), ships = createShips()) {
             }
         },
         recieveAttack: function (coords) {
-            if(board[coords.x][coords.y] == null){
-                board[coords.x][coords.y] = "miss"
-                return "miss"
-            }else{
-                for(let i = 0; i< 5; i++){
-                    if(ships[i].name == board[coords.x][coords.y]){
+            console.log(`here the data `, board[coords.x][coords.y]);
+            console.log("i need this to be true " ,board)
+
+            if (board[coords.x][coords.y] === null) {
+                console.log("i am here missing you baby !")
+                board[coords.x][coords.y] = "miss";
+                return "miss";
+            } else {
+                if(!shipsName.includes(board[coords.x][coords.y])){
+                    return "clicked";
+                }
+                for (let i = 0; i < 5; i++) {
+                    if (ships[i].name == board[coords.x][coords.y]) {
                         ships[i].hit();
-                        if(ships[i].isSunk()){
-                            return "sunk"
+                        if (ships[i].isSunk()) {
+                            return "sunk";
                         }
-                        return "on-water"
+                        return "hitted"
                     }
                 }
             }
@@ -95,7 +104,7 @@ function checkSpotEmpty(coordinates, lenght, array, horizantal) {
                 return false;
             }
         }
-    } else {
+    } else {    
         for (let i = 0; i < length; i++) {
             if (array[coordinates.x][coordinates.y + i] != null) {
                 return false;
@@ -104,13 +113,13 @@ function checkSpotEmpty(coordinates, lenght, array, horizantal) {
     }
 }
 
-function createShips(){
-    let ships = []
+function createShips() {
+    let ships = [];
     ships[0] = Ship("twoed", 2, 0, false);
     ships[1] = Ship("threed-one", 3, 0, false);
     ships[2] = Ship("threed-two", 3, 0, false);
     ships[3] = Ship("foured", 4, 0, false);
     ships[4] = Ship("fived", 5, 0, false);
 
-    return ships
+    return ships;
 }
