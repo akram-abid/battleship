@@ -18,7 +18,6 @@ export const gameFolw = (function () {
 
     const launchAttack = (coords, player, cell) => {
         if (!player || !cell) {
-            console.log("null  null")
             return
         }
         let currentPlayer, opponentPlayer, currentCells, opponentCells;

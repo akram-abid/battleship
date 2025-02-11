@@ -6,6 +6,10 @@ export function gameboard(board = createBoard(), ships = createShips()) {
     return {
         ships,
         board,
+        upadteBoard: function (coords, val) {
+            board[coords.x][coords.y] = val;
+        },
+
         validatePlacing: function (ship, coordinates, horizantal) {
             if (horizantal) {
                 if (coordinates.x <= 10 - ship.lenght) {
@@ -17,6 +21,7 @@ export function gameboard(board = createBoard(), ships = createShips()) {
                             horizantal
                         )
                     ) {
+                        console.log("i got here")
                         for (let i = 0; i < ship.lenght; i++) {
                             board[coordinates.x + i][coordinates.y] = ship.name;
                         }
@@ -35,7 +40,7 @@ export function gameboard(board = createBoard(), ships = createShips()) {
                         )
                     ) {
                         for (let i = 0; i < ship.lenght; i++) {
-                            board[coordinates.x][coordinates.y + 1] = ship.name;
+                            board[coordinates.x + i][coordinates.y] = ship.name;
                         }
                         return true;
                     }
@@ -45,14 +50,14 @@ export function gameboard(board = createBoard(), ships = createShips()) {
         },
         recieveAttack: function (coords) {
             console.log(`here the data `, board[coords.x][coords.y]);
-            console.log("i need this to be true " ,board)
+            console.log("i need this to be true ", board);
 
-            if (board[coords.x][coords.y] === null) {
-                console.log("i am here missing you baby !")
+            if (board[coords.x][coords.y] === 0) {
+                console.log("i am here missing you baby !");
                 board[coords.x][coords.y] = "miss";
                 return "miss";
             } else {
-                if(!shipsName.includes(board[coords.x][coords.y])){
+                if (!shipsName.includes(board[coords.x][coords.y])) {
                     return "clicked";
                 }
                 for (let i = 0; i < 5; i++) {
@@ -61,7 +66,7 @@ export function gameboard(board = createBoard(), ships = createShips()) {
                         if (ships[i].isSunk()) {
                             return "sunk";
                         }
-                        return "hitted"
+                        return "hitted";
                     }
                 }
             }
@@ -91,7 +96,7 @@ export function createBoard() {
     for (let i = 0; i < 10; i++) {
         board[i] = [];
         for (let j = 0; j < 10; j++) {
-            board[i][j] = null;
+            board[i][j] = 0;
         }
     }
     return board;
@@ -99,17 +104,19 @@ export function createBoard() {
 
 function checkSpotEmpty(coordinates, lenght, array, horizantal) {
     if (horizantal) {
-        for (let i = 0; i < length; i++) {
-            if (array[coordinates.x + i][coordinates.y] != null) {
+        for (let i = 0; i < lenght; i++) {
+            if (array[coordinates.x][coordinates.y + i] != 0) {
                 return false;
             }
         }
-    } else {    
-        for (let i = 0; i < length; i++) {
-            if (array[coordinates.x][coordinates.y + i] != null) {
+        return true;
+    } else {
+        for (let i = 0; i < lenght; i++) {
+            if (array[coordinates.x + i][coordinates.y] != 0) {
                 return false;
             }
         }
+        return true;
     }
 }
 
@@ -123,3 +130,20 @@ function createShips() {
 
     return ships;
 }
+
+console.log();
+console.log();
+console.log();
+console.log();
+
+const ship = Ship("towed", 5, 0, false)
+const board = gameboard();
+
+board.upadteBoard(Coordinates(5, 3), "amigo");
+board.upadteBoard(Coordinates(6, 3), "amigo");
+board.upadteBoard(Coordinates(7, 3), "amigo");
+
+console.log(board);
+console.log(checkSpotEmpty(Coordinates(0, 3), 7, board.board, false));
+console.log(board.validatePlacing(ship, Coordinates(4,5), true))
+//console.log(board);

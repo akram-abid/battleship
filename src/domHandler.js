@@ -1,5 +1,4 @@
 import { Player } from "./playerHandler.js";
-import { gameboard } from "./gameboard.js";
 import { Coordinates } from "./gameboard.js";
 import { gameFolw } from "./gameFlow.js";
 import explosion from "./images/explosion.png";
@@ -11,6 +10,7 @@ export const domHandler = (function () {
 
     let vsComputer = true;
 
+    
     const vsCopmuterPlayers = (first, second) => {
         firstPlayer = Player(first);
         secondPlayer = Player(second);
