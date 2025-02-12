@@ -12,24 +12,6 @@ export function gameboard(board = createBoard(), ships = createShips()) {
 
         validatePlacing: function (ship, coordinates, horizantal) {
             if (horizantal) {
-                if (coordinates.x <= 10 - ship.lenght) {
-                    if (
-                        checkSpotEmpty(
-                            coordinates,
-                            ship.lenght,
-                            board,
-                            horizantal
-                        )
-                    ) {
-                        console.log("i got here")
-                        for (let i = 0; i < ship.lenght; i++) {
-                            board[coordinates.x + i][coordinates.y] = ship.name;
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            } else {
                 if (coordinates.y <= 10 - ship.lenght) {
                     if (
                         checkSpotEmpty(
@@ -40,9 +22,30 @@ export function gameboard(board = createBoard(), ships = createShips()) {
                         )
                     ) {
                         for (let i = 0; i < ship.lenght; i++) {
+                            board[coordinates.x][coordinates.y + i] = ship.name;
+                        }
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            } else {
+                if (coordinates.x <= 10 - ship.lenght) {
+                    if (
+                        checkSpotEmpty(
+                            coordinates,
+                            ship.lenght,
+                            board,
+                            horizantal
+                        )
+                    ) {
+                        for (let i = 0; i < ship.lenght; i++) {
                             board[coordinates.x + i][coordinates.y] = ship.name;
                         }
                         return true;
+                    } else {
+                        return false;
                     }
                 }
                 return false;
@@ -130,13 +133,13 @@ function createShips() {
 
     return ships;
 }
-
+/*
 console.log();
 console.log();
 console.log();
 console.log();
 
-const ship = Ship("towed", 5, 0, false)
+const ship = Ship("towed", 5, 0, false);
 const board = gameboard();
 
 board.upadteBoard(Coordinates(5, 3), "amigo");
@@ -145,5 +148,5 @@ board.upadteBoard(Coordinates(7, 3), "amigo");
 
 console.log(board);
 console.log(checkSpotEmpty(Coordinates(0, 3), 7, board.board, false));
-console.log(board.validatePlacing(ship, Coordinates(4,5), true))
-//console.log(board);
+console.log(board.validatePlacing(ship, Coordinates(4, 4), false));
+console.log(board);*/

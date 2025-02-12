@@ -1,7 +1,6 @@
 import { Player } from "./playerHandler.js";
 import { Coordinates } from "./gameboard.js";
 import { gameFolw } from "./gameFlow.js";
-import explosion from "./images/explosion.png";
 
 export const domHandler = (function () {
     const body = document.querySelector("body");
@@ -49,8 +48,6 @@ export const domHandler = (function () {
                 cell.classList.add(`cell-${i}-${j}`);
                 cell.dataset.value = boardPlayer;
 
-                const img = document.createElement("img");
-                img.src = explosion;
                 cell.addEventListener("click", (e) => {
                     console.log(e.target.style.backgroundColor == "")
                     if (e.target.style.backgroundColor == ""){
@@ -73,9 +70,31 @@ export const domHandler = (function () {
         body.appendChild(bodyContainer);
     };
 
+    const colorCells = (player) => {
+        let wantedCell
+        const shipNames = gameFolw.firstPlayer.board.ships.map((ship) => ship.name);
+        for (let i = 0; i < firstPlayer.board.board.length; i++) {
+            for (let j = 0; j < firstPlayer.board.board.length; j++){
+                console.log("i am handling the colors of this ",)
+                if(shipNames.includes(gameFolw.firstPlayer.board.board[i][j])){
+                    console.log("i will color this ")
+                    wantedCell = document.querySelector(`.cell-${i}-${j}.first-player`)
+                    wantedCell.style.backgroundColor = "rgba(253, 215, 0, 0.73)"
+                }
+            }
+        }
+    }
+
+    const showShips = () => {
+        console.log(gameFolw.placeShipsRandomly());
+        console.log("i am on show ships ",gameFolw.firstPlayer.board.board)
+        colorCells(firstPlayer);
+    }
+
     return {
         createBoard,
         vsCopmuterPlayers,
+        showShips
     };
 })();
 
@@ -95,3 +114,7 @@ function handelClick(e, i, j, boardPlayer, vsComputer, secondPlayer, firstattack
         } while (attack === "clicked");
     }
 }
+
+//console.log(gameFolw.firstPlayer.board.board);
+//gameFolw.placeShipsRandomly()
+//console.log("last one ",gameFolw.firstPlayer.board.board);

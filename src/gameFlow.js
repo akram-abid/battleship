@@ -1,3 +1,4 @@
+import { Coordinates } from "./gameboard.js";
 import { Player } from "./playerHandler.js";
 
 export const gameFolw = (function () {
@@ -18,24 +19,24 @@ export const gameFolw = (function () {
 
     const launchAttack = (coords, player, cell) => {
         if (!player || !cell) {
-            return
+            return;
         }
         let currentPlayer, opponentPlayer, currentCells, opponentCells;
-        let currentPlayerClass 
-        
+        let currentPlayerClass;
+
         // Determine current and opponent players based on turn
-        console.log(`coords ${coords.x}-${coords.y}`)
+        console.log(`coords ${coords.x}-${coords.y}`);
         if (turn) {
-            console.log("1 player turn")
-            currentPlayerClass = "first-player"
+            console.log("1 player turn");
+            currentPlayerClass = "first-player";
             currentPlayer = firstPlayer;
             opponentPlayer = secondPlayer;
             currentCells = player1cells;
             opponentCells = player2cells;
         } else {
-            console.log("2 player turn")
+            console.log("2 player turn");
             currentPlayer = secondPlayer;
-            currentPlayerClass = "second-player"
+            currentPlayerClass = "second-player";
             opponentPlayer = firstPlayer;
             currentCells = player2cells;
             opponentCells = player1cells;
@@ -73,9 +74,37 @@ export const gameFolw = (function () {
         }
     };
 
+    const placeShipsRandomly = (/*player*/) => {
+        let randX, randY;
+        let state;
+        const ships = firstPlayer.board.ships;
+        for (let i = 0; i < ships.length; i++) {
+            do {
+                randX = Math.floor(Math.random() * 10);
+                randY = Math.floor(Math.random() * 10);
+                state = firstPlayer.board.validatePlacing(
+                    ships[i],
+                    Coordinates(randX, randY),
+                    Math.random()<0.5,
+                );
+            } while (!state);
+        }
+        console.log("i am trying to place////////////////////////////////// ", state)
+        return state
+    };
+
     return {
         changeTurn,
         getTurn,
         launchAttack,
+        placeShipsRandomly,
+        firstPlayer,
+        secondPlayer,
     };
 })();
+
+const first = Player("player1");
+/*
+console.log(gameFolw.firstPlayer.board.board);
+gameFolw.placeShipsRandomly()
+console.log("last one ",gameFolw.firstPlayer.board.board);*/
