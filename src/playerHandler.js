@@ -4,5 +4,8 @@ export function Player(name, board = gameboard()){
     return {
         name,
         board,
+        reZeroBoard: function (){
+            board.reinitalizeBorad()
+        }
     }
 }

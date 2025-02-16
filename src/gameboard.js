@@ -1,14 +1,25 @@
 import { Ship } from "./shipHandler.js";
 
-let shipsName = ["twoed", "threed-one", "threed-two", "fived"];
+let shipsName = ["twoed", "threed-one", "threed-two", "foured", "fived"];
 
 export function gameboard(board = createBoard(), ships = createShips()) {
     return {
         ships,
         board,
+
+        reinitalizeBorad: function () {
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j++) {
+                    board[i][j] = 0
+                }
+            }
+            console.log("in game board ", board);
+        },
+
         upadteBoard: function (coords, val) {
             board[coords.x][coords.y] = val;
         },
+
 
         validatePlacing: function (ship, coordinates, horizantal) {
             if (horizantal) {
@@ -52,11 +63,13 @@ export function gameboard(board = createBoard(), ships = createShips()) {
             }
         },
         recieveAttack: function (coords) {
-            console.log(`here the data `, board[coords.x][coords.y]);
-            console.log("i need this to be true ", board);
-
+            console.log("the board ", board);
+            console.log(
+                `attcking ${coords.x} ${coords.y} and it have ${
+                    board[coords.x][coords.y]
+                }`
+            );
             if (board[coords.x][coords.y] === 0) {
-                console.log("i am here missing you baby !");
                 board[coords.x][coords.y] = "miss";
                 return "miss";
             } else {
@@ -67,6 +80,15 @@ export function gameboard(board = createBoard(), ships = createShips()) {
                     if (ships[i].name == board[coords.x][coords.y]) {
                         ships[i].hit();
                         if (ships[i].isSunk()) {
+                            console.log(
+                                "i am going to return sunk ok? ",
+                                ships[i].sunk
+                            );
+                            ships[i].sunked();
+                            console.log(
+                                "i am going to return sunk ok? ",
+                                ships[i].sunk
+                            );
                             return "sunk";
                         }
                         return "hitted";
@@ -76,15 +98,6 @@ export function gameboard(board = createBoard(), ships = createShips()) {
         },
     };
 }
-
-/*
-const ship = Ship("c1", 4, 0, false);
-const coords = Coordinates(7, 7);
-const baord = gameboard();
-ship.hit()
-ship.hit()
-console.log(ship.hits)
-*/
 
 export function Coordinates(x, y) {
     return {
