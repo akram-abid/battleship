@@ -146,20 +146,3 @@ function createShips() {
 
     return ships;
 }
-/*
-console.log();
-console.log();
-console.log();
-console.log();
-
-const ship = Ship("towed", 5, 0, false);
-const board = gameboard();
-
-board.upadteBoard(Coordinates(5, 3), "amigo");
-board.upadteBoard(Coordinates(6, 3), "amigo");
-board.upadteBoard(Coordinates(7, 3), "amigo");
-
-console.log(board);
-console.log(checkSpotEmpty(Coordinates(0, 3), 7, board.board, false));
-console.log(board.validatePlacing(ship, Coordinates(4, 4), false));
-console.log(board);*/

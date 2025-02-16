@@ -1,6 +1,8 @@
 import { Player } from "./playerHandler.js";
-import { Coordinates } from "./gameboard.js";
+import { Coordinates, gameboard } from "./gameboard.js";
 import { gameFolw } from "./gameFlow.js";
+
+let shipsName = ["twoed", "threed-one", "threed-two", "foured", "fived"];
 
 export const domHandler = (function () {
     const body = document.querySelector("body");
@@ -53,19 +55,20 @@ export const domHandler = (function () {
             gameFolw.firstPlayer.board.reinitalizeBorad();
             clearColors(true);
             declineSelected();
+            finishPlacing = false;
         });
 
-        const direction = document.createElement("button")
-        direction.innerHTML = "horizonatal"
-        direction.addEventListener('click', (e) => {
-            horizontal = !horizontal
-            if(horizontal){
-                e.target.innerHTML = "horizintal"
-            }else{
-                e.target.innerHTML = "vertical"
+        const direction = document.createElement("button");
+        direction.innerHTML = "horizonatal";
+        direction.addEventListener("click", (e) => {
+            horizontal = !horizontal;
+            if (horizontal) {
+                e.target.innerHTML = "horizintal";
+            } else {
+                e.target.innerHTML = "vertical";
             }
-        })
-        buttonsHolder.appendChild(direction)
+        });
+        buttonsHolder.appendChild(direction);
 
         const bodyContainer = document.createElement("div");
         bodyContainer.classList.add("board-container");
@@ -84,48 +87,75 @@ export const domHandler = (function () {
                 cell.classList.add("cell");
                 cell.classList.add("placing");
                 cell.classList.add(`cell-${i}-${j}`);
-                let cords = Coordinates(i, j)
+                let cords = Coordinates(i, j);
                 cell.dataset.value = JSON.stringify(cords);
                 board.appendChild(cell);
-                cell.addEventListener("click", () => {
-                    console.log("i was")
-                    if(shipSelected < 4){
-                        shipSelected += 1;
-                        declineSelected(false);
-                        defineSelected(
-                            document.querySelector(
-                                `.${gameFolw.firstPlayer.board.ships[shipSelected].name}`
-                            )
+                cell.addEventListener("click", (e) => {
+                    if (!finishPlacing) {
+                        let placeState = gameFolw.firstPlayer.board.validatePlacing(
+                            gameFolw.firstPlayer.board.ships[shipSelected],
+                            JSON.parse(e.target.dataset.value),
+                            horizontal
                         );
+                        if(placeState){
+                            colorCells(true);
+                            declineSelected(false);
+                            defineSelected(
+                                document.querySelector(
+                                    `.${gameFolw.firstPlayer.board.ships[shipSelected].name}`
+                                )
+                            );
+                            shipSelected += 1;
+                            if(shipSelected == 5){
+                                finishPlacing = true
+                                shipSelected --
+                            }                            
+                        }
                     }
+                    console.log(gameFolw.firstPlayer.board.board)
                 });
 
                 cell.addEventListener("mouseenter", (e) => {
-                    let cellToHover
+                    let cellToHover;
                     if (horizontal) {
-                        clearColors(true, true)
-                        for (let i = 0; i < gameFolw.firstPlayer.board.ships[shipSelected].lenght; i++) {
-                            let coords = JSON.parse(e.target.dataset.value)
-                            cellToHover = document.querySelector(`.cell-${coords.x}-${coords.y + i}.placing.cell`)
-                            if(cellToHover){
-                                cellToHover.style.backgroundColor = "rgba(252, 192, 64, 0.59)"
+                        clearColors(true, true);
+                        for (
+                            let i = 0; i < gameFolw.firstPlayer.board.ships[shipSelected].lenght;
+                            i++
+                        ) {
+                            let coords = JSON.parse(e.target.dataset.value);
+                            cellToHover = document.querySelector(
+                                `.cell-${coords.x}-${coords.y + i}.placing.cell`
+                            );
+                            if (cellToHover) {
+                                cellToHover.style.backgroundColor =
+                                    "rgba(252, 192, 64, 0.59)";
                             }
                         }
-                    }else{
-                        clearColors(true, true)
-                        for (let i = 0; i < gameFolw.firstPlayer.board.ships[shipSelected].lenght; i++) {
-                            let coords = JSON.parse(e.target.dataset.value)
-                            cellToHover = document.querySelector(`.cell-${coords.x + i}-${coords.y}.placing.cell`)
-                            if(cellToHover){
-                                cellToHover.style.backgroundColor = "rgba(252, 192, 64, 0.59)"
+                    } else {
+                        clearColors(true, true);
+                        for (
+                            let i = 0;
+                            i <
+                            gameFolw.firstPlayer.board.ships[shipSelected]
+                                .lenght;
+                            i++
+                        ) {
+                            let coords = JSON.parse(e.target.dataset.value);
+                            cellToHover = document.querySelector(
+                                `.cell-${coords.x + i}-${coords.y}.placing.cell`
+                            );
+                            if (cellToHover) {
+                                cellToHover.style.backgroundColor =
+                                    "rgba(255, 94, 0, 0.67)";
                             }
                         }
                     }
                 });
 
-                cell.addEventListener('mouseleave', () => {
-                    clearColors(true, true)
-                })
+                cell.addEventListener("mouseleave", () => {
+                    clearColors(true, true);
+                });
             }
         }
         const ships = document.createElement("div");
@@ -156,6 +186,7 @@ export const domHandler = (function () {
         start.innerHTML = "start the Game";
         start.classList.add("start");
         body.appendChild(start);
+
         defineSelected(
             document.querySelector(
                 `.${gameFolw.firstPlayer.board.ships[shipSelected].name}`
@@ -176,7 +207,6 @@ export const domHandler = (function () {
             e.style.padding = "";
             e.borderRadius = "";
         });
-        //shipSelected = 0
         if (!random) {
             defineSelected(
                 document.querySelector(
@@ -199,22 +229,20 @@ export const domHandler = (function () {
                         `.cell-${i}-${j}.first-player`
                     );
                 }
-                wantedCell.style.backgroundColor = "";
+                if (
+                    !shipsName.includes(gameFolw.firstPlayer.board.board[i][j])
+                ) {
+                    wantedCell.style.backgroundColor = "";
+                }
             }
         }
 
-        /*declineSelected(
-            document.querySelector(
-                `.${gameFolw.firstPlayer.board.ships[shipSelected].name}`
-            )
-        );*/
-        if(!hover){
+        if (!hover) {
             shipSelected = 0;
         }
     };
 
     const createBoard = function (boardPlayer, clas) {
-        console.log("ok it is working");
         const bodyContainer = document.createElement("div");
         bodyContainer.classList.add("board-container");
 
@@ -243,14 +271,7 @@ export const domHandler = (function () {
                             firstPlayer,
                             e.target
                         );
-                        console.log(
-                            "state ",
-                            firstattack + "//////////////////////"
-                        );
                         if (firstattack == "sunk") {
-                            console.log(
-                                "we should color in first ===================================="
-                            );
                             colorSunkShips(1);
                         }
                         handelClick(vsComputer, secondPlayer, firstattack);
@@ -285,7 +306,7 @@ export const domHandler = (function () {
                                 wantedCell = document.querySelector(
                                     `.cell-${i}-${j}.second-player`
                                 );
-                                wantedCell.style.backgroundColor = "white";
+                                wantedCell.style.backgroundColor = "red";
                             }
                         }
                     }
@@ -343,10 +364,7 @@ export const domHandler = (function () {
                 } else {
                     attack = "clicked";
                 }
-                console.log(
-                    "second attack state ",
-                    attack + "////////////////"
-                );
+
             } while (attack == "clicked");
         }
     };
@@ -378,7 +396,6 @@ export const domHandler = (function () {
     };
 
     const showShips = () => {
-        console.log(gameFolw.placeShipsFirstPlayerRandomly());
         console.log(gameFolw.placeComputerships());
         colorCells(false);
     };
@@ -394,18 +411,8 @@ export const domHandler = (function () {
 function have(array, cords) {
     for (let i = 0; i < array.length; i++) {
         if (array[i].x == cords.x && array[i].y == cords.y) {
-            console.log(
-                `${cords.x}, ${cords.y} i have it------------------------`
-            );
             return true;
         }
     }
-    console.log(
-        `${cords.x}, ${cords.y} i don't have it---------------------------`
-    );
     return false;
 }
-
-//console.log(gameFolw.firstPlayer.board.board);
-//gameFolw.placeShipsRandomly()
-//console.log("last one ",gameFolw.firstPlayer.board.board);

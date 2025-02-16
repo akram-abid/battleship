@@ -1,11 +1,15 @@
 import "./style.css";
 import { domHandler } from "./domHandler.js";
-import { gameFolw } from "./gameFlow.js";
-//import { gameFolw } from "./gameFlow.js";
 
-//domHandler.vsCopmuterPlayers("akram", "mustapha")
-//domHandler.showShips();
+const body = document.querySelector("body")
 
 domHandler.createBoardForPlacing("placing")
-console.log(gameFolw.firstPlayer.board.board)
 
+const start = document.querySelector(".start")
+console.log(start)
+
+start.addEventListener("click", () => {
+    body.innerHTML = ""
+    domHandler.vsCopmuterPlayers("akram", "mustapha")
+    domHandler.showShips();
+})

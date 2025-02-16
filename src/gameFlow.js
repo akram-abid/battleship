@@ -3,7 +3,6 @@ import { Player } from "./playerHandler.js";
 
 export const gameFolw = (function () {
     let turn = true;
-    let vsComputer = false;
     const firstPlayer = Player("player1");
     const secondPlayer = Player("player2");
     const player1cells = document.querySelectorAll(".first-player");
@@ -24,8 +23,6 @@ export const gameFolw = (function () {
         let currentPlayer, opponentPlayer, currentCells, opponentCells;
         let currentPlayerClass;
 
-        // Determine current and opponent players based on turn
-        console.log(`coords ${coords.x}-${coords.y}`);
         if (turn) {
             console.log("1 player turn");
             currentPlayerClass = "first-player";
@@ -54,34 +51,25 @@ export const gameFolw = (function () {
 
         // Attack logic
         const state = opponentPlayer.board.recieveAttack(coords);
-        console.log("Attack state:", state +"/////////////////////////////////////:");
 
         switch (state) {
             case "miss":
-                console.log("i missed it fuck")
-                cell.style.backgroundColor = "rgba(0, 90, 226, 0.67)"; // Missed attack color
+                cell.style.backgroundColor = "rgba(0, 90, 226, 0.67)";
                 cell.classList.add("miss")
-                changeTurn(); // Switch turn after a miss
+                changeTurn(); 
                 return state;
             case "clicked":
-                console.log("should be green")
-                //cell.style.backgroundColor = "rgba(0, 90, 22, 0.67)"; // Mark as already clicked
-                return state; // Do not change turn
+                return state;
             case "sunk":
 
-                console.log("should be red===================here plyers ",opponentPlayer)
-                cell.style.backgroundColor = "red"; // Hit indication
-                // Optional: Add logic for ship sinking (e.g., check for game over)
+                cell.style.backgroundColor = "red"; 
                 changeTurn()
                 return state
-                break;
             default:
-                console.log("should be hitted right")
                 cell.style.backgroundColor = "rgba(255, 94, 0, 0.67)";
                 cell.classList.add("hitted")
                 changeTurn()
                 return state
-                break;
         }
     };
 
@@ -100,7 +88,6 @@ export const gameFolw = (function () {
                 );
             } while (!state);
         }
-        console.log("i am trying to place////////////////////////////////// ", state)
         return state
     };
 
@@ -119,7 +106,6 @@ export const gameFolw = (function () {
                 );
             } while (!state);
         }
-        console.log("i am trying to place////////////////////////////////// ", state)
         return state
     };
 
@@ -133,9 +119,3 @@ export const gameFolw = (function () {
         secondPlayer,
     };
 })();
-
-const first = Player("player1");
-/*
-console.log(gameFolw.firstPlayer.board.board);
-gameFolw.placeShipsRandomly()
-console.log("last one ",gameFolw.firstPlayer.board.board);*/
